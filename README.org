@@ -11,7 +11,6 @@ compatible with stock Emacs and popular configurations.
 - Support for flycheck/flymake diagnostics and magit diff faces
 - ANSI/terminal color vector set for consistent shells
 - Safe refresh hooks to update icon/caches when the theme is enabled
-- Safe refresh hooks to update icon/caches when the theme is enabled
 
 * Installation
 
@@ -21,10 +20,6 @@ compatible with stock Emacs and popular configurations.
   :ensure (:host github :repo "d4lj337/Mini-midnight")
   :hook  (emacs-startup . (lambda () (load-theme 'Mini-midnight t))))
 #+end_src
-
-* Usage
-Enable the theme with:
-#+begin_src emacs-lisp
 
 * Usage
 Enable the theme with:
