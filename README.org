@@ -1,8 +1,8 @@
 
-* Mini-midnight
+* mini-midnight
 A minimal, modern dark theme for Emacs with sensible defaults and support for
-common packages (vertico, marginalia, corfu, doom-modeline, flycheck, magit,
-eshell, vterm, org, etc.). Designed to be low-contrast, readable, and
+common packages (*vertico, marginalia, corfu, doom-modeline, flycheck, magit,
+eshell, vterm, org*, etc.). Designed to be low-contrast, readable, and
 compatible with stock Emacs and popular configurations.
 
 * Features
@@ -24,7 +24,7 @@ compatible with stock Emacs and popular configurations.
 * Usage
 Enable the theme with:
 #+begin_src emacs-lisp
-(load-theme 'Mini-midnight t)
+(load-theme 'mini-midnight t)
 #+end_src
 
 If you update icons or completion packages and colors look stale, the theme
