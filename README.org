@@ -5,6 +5,8 @@ common packages (*vertico, marginalia, corfu, doom-modeline, flycheck, magit,
 eshell, vterm, org*, etc.). Designed to be low-contrast, readable, and
 compatible with stock Emacs and popular configurations.
 
+[[file:mini-midnight.png]]
+
 * Features
 - Compact, low-contrast palette with readable syntax highlighting
 - Faces for completion UIs (corfu/vertico/marginalia), consult previews
