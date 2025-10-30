@@ -1,0 +1,15 @@
+Mini-midnight
+===========
+
+Mini-midnight is a compact, modernized dark theme for Emacs that aims to be readable,
+minimal, and compatible with stock Emacs and common packages.
+
+Features
+--------
+- Clean, low-contrast palette with readable syntax highlighting.
+- Support for many packages: `vertico`, `marginalia`, `corfu`, `consult`,
+  `doom-modeline`, `flycheck`, `magit`, `vundo`, `eshell`, `term`/`vterm`, and more.
+- ANSI/terminal color vector set for consistent shell colors.
+- Safe refresh hooks to update icon caches and popups when the theme is loaded.
+
+   
