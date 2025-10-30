@@ -1,15 +1,40 @@
-Mini-midnight
-===========
 
-Mini-midnight is a compact, modernized dark theme for Emacs that aims to be readable,
-minimal, and compatible with stock Emacs and common packages.
+* Mini-midnight
+A minimal, modern dark theme for Emacs with sensible defaults and support for
+common packages (vertico, marginalia, corfu, doom-modeline, flycheck, magit,
+eshell, vterm, org, etc.). Designed to be low-contrast, readable, and
+compatible with stock Emacs and popular configurations.
 
-Features
---------
-- Clean, low-contrast palette with readable syntax highlighting.
-- Support for many packages: `vertico`, `marginalia`, `corfu`, `consult`,
-  `doom-modeline`, `flycheck`, `magit`, `vundo`, `eshell`, `term`/`vterm`, and more.
-- ANSI/terminal color vector set for consistent shell colors.
-- Safe refresh hooks to update icon caches and popups when the theme is loaded.
+* Features
+- Compact, low-contrast palette with readable syntax highlighting
+- Faces for completion UIs (corfu/vertico/marginalia), consult previews
+- Support for flycheck/flymake diagnostics and magit diff faces
+- ANSI/terminal color vector set for consistent shells
+- Safe refresh hooks to update icon/caches when the theme is enabled
+- Safe refresh hooks to update icon/caches when the theme is enabled
 
-   
+* Installation
+
+1. Install from GitHub with elpaca + `use-package` 
+#+begin_src emacs-lisp
+(use-package mini-midnight
+  :ensure (:host github :repo "d4lj337/Mini-midnight")
+  :hook  (emacs-startup . (lambda () (load-theme 'Mini-midnight t))))
+#+end_src
+
+* Usage
+Enable the theme with:
+#+begin_src emacs-lisp
+
+* Usage
+Enable the theme with:
+#+begin_src emacs-lisp
+(load-theme 'Mini-midnight t)
+#+end_src
+
+If you update icons or completion packages and colors look stale, the theme
+includes guarded refresh hooks that attempt to reset common icon/caches
+(kind-icon, all-the-icons, corfu, vterm).
+
+* License 
+This project is licensed under the GNU General Public License v3.0 - see the [[LICENSE][LICENSE]] file for details.
