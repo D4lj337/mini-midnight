@@ -1,4 +1,4 @@
-;;; mini-midnight-theme.el --- minimal modern dark theme with package face support -*- lexical-binding: t; -*-
+;;; mini-midnight-theme.el ---  Mini-midnight: a compact, readable dark theme.  -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025, D4lj337
 ;; Author: D4lj337
@@ -20,11 +20,6 @@
 ;; - Provides guarded refresh hooks to update external icon/caches on theme
 ;;   activation (kind-icon, corfu, vterm, all-the-icons).
 ;;
-;; Installation:
-;; Place this file on your `custom-theme-load-path` (for example:
-;; ~/.emacs.d/themes/), then enable with:
-;;   (load-theme 'mini-midnight t)
-;;
 ;;; Code:
 
 (defgroup mini-midnight nil
@@ -36,7 +31,17 @@
 (deftheme mini-midnight
   "mini-midnight: a compact, readable dark theme.")
 
-;; Palette
+;; Option: control whether the theme attempts to refresh external caches
+(defcustom mini-midnight-refresh-external-caches t
+  "If non-nil, run package-specific cache refreshers after the theme is loaded.
+
+Some packages cache rendered icons or color tables. When a theme is
+switched these caches may need invalidation so visuals match the new
+palette. Set this to nil to avoid theme file side-effects."
+  :type 'boolean
+  :group 'mini-midnight)
+
+;; Palette and face definitions
 (let* ((mm-class '((class color) (min-colors 89)))
        (mm-palette
         (list :bg "#0b0b0b"
@@ -174,7 +179,8 @@
      `(term-color-blue    ((,mm-class :foreground ,accent-blue :background ,accent-blue)))
      `(term-color-magenta ((,mm-class :foreground ,accent-magenta :background ,accent-magenta)))
      `(term-color-cyan    ((,mm-class :foreground ,accent-cyan :background ,accent-cyan)))
-     `(term-color-white   ((,mm-class :foreground ,fg :background ,fg)))
+     ;; FIXED: do not set white background equal to foreground (makes text invisible)
+     `(term-color-white   ((,mm-class :foreground ,fg :background ,bg)))
 
      ;; Eshell
      `(eshell-prompt ((,mm-class :foreground ,accent-blue :weight bold)))
@@ -208,32 +214,44 @@
 
 ;;; Theme refresh helpers
 (defun mini-midnight--refresh-external-caches ()
-  "Call package-specific refreshers if available."
-  (when (fboundp 'kind-icon-reset-cache)
-    (ignore-errors (kind-icon-reset-cache)))
-  (when (fboundp 'all-the-icons-revert-cache)
-    (ignore-errors (all-the-icons-revert-cache)))
-  (when (fboundp 'corfu-reset)
-    (ignore-errors (corfu-reset)))
-  (when (fboundp 'vterm-invalidate-table)
-    (ignore-errors (vterm-invalidate-table)))
-  ;; Force mode-line redraw and redisplay
+  "Call package-specific refreshers if available.
+
+This invalidates caches for icon libraries and other packages that may
+store colorized artifacts so the theme change is applied immediately."
+  (when (and (boundp 'mini-midnight-refresh-external-caches)
+             mini-midnight-refresh-external-caches)
+    (when (fboundp 'kind-icon-reset-cache)
+      (ignore-errors (kind-icon-reset-cache)))
+    (when (fboundp 'all-the-icons-revert-cache)
+      (ignore-errors (all-the-icons-revert-cache)))
+    (when (fboundp 'corfu-reset)
+      (ignore-errors (corfu-reset)))
+    (when (fboundp 'vterm-invalidate-table)
+      (ignore-errors (vterm-invalidate-table))))
+  ;; Always force a mode-line update and redisplay so visual changes take effect.
   (force-mode-line-update t)
   (redisplay))
 
-;; Run refresher after loading or enabling the theme
-(advice-add 'enable-theme :after
-            (lambda (&rest _)
-              (when (and (boundp 'custom-enabled-themes)
-                         custom-enabled-themes
-                         (eq (car custom-enabled-themes) 'mini-midnight))
-                (mini-midnight--refresh-external-caches))))
+(defun mini-midnight--theme-enabled-p ()
+  "Return non-nil if `mini-midnight' is present in `custom-enabled-themes'."
+  (and (boundp 'custom-enabled-themes)
+       custom-enabled-themes
+       (member 'mini-midnight custom-enabled-themes)))
 
-(advice-add 'load-theme :after
-            (lambda (&rest _)
-              (when (and (boundp 'custom-enabled-themes)
-                         (member 'mini-midnight custom-enabled-themes))
-                (mini-midnight--refresh-external-caches))))
+(defun mini-midnight--maybe-refresh-after-enable (&rest _args)
+  "Advice to run after `enable-theme'."
+  (when (mini-midnight--theme-enabled-p)
+    (mini-midnight--refresh-external-caches)))
+
+(defun mini-midnight--maybe-refresh-after-load (&rest _args)
+  "Advice to run after `load-theme'."
+  (when (mini-midnight--theme-enabled-p)
+    (mini-midnight--refresh-external-caches)))
+
+;; Install advices if the user allows refresher behavior
+(when mini-midnight-refresh-external-caches
+  (advice-add 'enable-theme :after #'mini-midnight--maybe-refresh-after-enable)
+  (advice-add 'load-theme   :after #'mini-midnight--maybe-refresh-after-load))
 
 ;;;###autoload
 (when load-file-name
