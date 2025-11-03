@@ -19,7 +19,7 @@ compatible with stock Emacs and popular configurations.
 1. Install from GitHub with elpaca + `use-package` 
 #+begin_src emacs-lisp
 (use-package mini-midnight
-  :ensure (:host github :repo "d4lj337/mini-midnight")
+  :ensure (:host github :repo "d4lj337/mini-midnight" :main "mini-midnight-theme.el")
   :hook  (emacs-startup . (lambda () (load-theme 'mini-midnight t))))
 #+end_src
 
